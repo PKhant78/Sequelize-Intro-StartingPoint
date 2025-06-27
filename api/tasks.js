@@ -7,14 +7,29 @@ const { Task, User } = require("../database");
 
 // GET all tasks
 router.get("/", async (req, res) => {
-  const task = Task.findAll();
-  res.json(task);
+  try {
+    const task = await Task.findAll();
+    res.json(task);
+  } catch (error) {
+    res.status(501).send("Not implemented");
+  }
+  
 });
 
 // GET a single task by id
 router.get("/:id", async (req, res) => {
   const task = Task.findByPk(req.params.id);
   res.status.send(task)
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const task = Task.findByPk(req.params.id);
+    res.status.send(task)
+  } catch (error) {
+    res.status(501).send("Not implemented");
+  }
+  
 });
 
 // Patch a task by id
