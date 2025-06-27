@@ -19,8 +19,9 @@ router.get("/", async (req, res) => {
 // GET a single task by id
 router.get("/:id", async (req, res) => {
   try {
-    const task = await Task.findByPk(req.params.id);
-    res.status.send(task)
+    const id = parseInt(req.params.id);
+    const task = await Task.findByPk(id)
+    res.send(task)
   } catch (error) {
     res.status(501).send("Failed to get task", req.params.id);
   } 
@@ -29,7 +30,14 @@ router.get("/:id", async (req, res) => {
 // Patch a task by id
 router.patch("/:id", async (req, res) => {
   try {
-    const task = await Task.update(parseInt(req.params.id), req.body);
+    const id = parseInt(req.params.id);
+    const task = await Task.findByPk(id)
+    
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+
+    await task.update(req.body);
     res.send(task);
   } catch (error) {
     res.status(501).send("Failed to patch task");
@@ -40,14 +48,17 @@ router.patch("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const task = await Task.delete(id);
-res.send(task);
+    const task = await Task.findByPk(id);
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+    await task.destroy();
+    res.send(task);
   }
   catch (error) {
     res.status(501).send("Failed to delete task");
   }
 });
-
 
 // Create a new task
 router.post("/", async (req, res) => {
