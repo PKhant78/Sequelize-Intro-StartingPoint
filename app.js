@@ -1,9 +1,10 @@
+require("dotenv").config(); // this line should be first
 const express = require("express");
 const morgan = require("morgan");
 const path = require("path");
 const app = express();
 const apiRouter = require("./api");
-require("dotenv").config();
+// require("dotenv").config(); // move this line up to line 1
 const { db } = require("./database");
 const cors = require("cors");
 
