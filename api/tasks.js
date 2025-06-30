@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
     const task = await Task.findAll();
     res.json(task);
   } catch (error) {
-    res.status(501).send("Failed to get all tasks");
+    res.sendStatus(501);
   }
   
 });
